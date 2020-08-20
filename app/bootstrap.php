@@ -1,5 +1,6 @@
 <?php
 
+use Accounted\Helpers\Hash;
 use Slim\Slim;
 use Slim\Views\Twig;
 use Noodlehaus\Config;
@@ -32,8 +33,8 @@ $app->container->set('user', function() {
 	return new User();
 });
 
-$app->get('/', function() use ($app) {
-	$app->render('home.php');
+$app->container->singleton('hash', function() use ($app) {
+	return new Hash($app->config);
 });
 
 /** @var \Slim\View */
