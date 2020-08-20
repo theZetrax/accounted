@@ -10,8 +10,8 @@ return [
 	],
 	'db' => [
 		'driver' => 'mysql',
-		'host' => '127.0.0.1',
-		'name' => 'site',
+		'host' => '127.0.0.1:3308',
+		'name' => 'accounted',
 		'username' => 'root',
 		'password' => '',
 		'chartset' => 'utf8',

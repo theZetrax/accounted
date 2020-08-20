@@ -9,6 +9,7 @@ CREATE TABLE `users` (
 	`username` VARCHAR(20) NOT NULL,
 	`firstname` VARCHAR(50) NULL,
 	`lastname` VARCHAR(50) NULL,
+	`email` VARCHAR(255) NOT NULL,
 	`password` VARCHAR(255) NOT NULL,
 	`active` TINYINT(1) NOT NULL,
 	`active_hash` VARCHAR(255) NULL,
@@ -18,5 +19,5 @@ CREATE TABLE `users` (
 	`created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	`updated_at` TIMESTAMP NULL,
 	PRIMARY KEY (`id`),
-	UNIQUE (`username`)
+	UNIQUE (`username`, `email`)
 );
