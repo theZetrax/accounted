@@ -4,9 +4,9 @@ use Illuminate\Database\Capsule\Manager as Capsule;
 
 $capsule = new Capsule;
 
-$capsule->addConnection(
-	$app->config->get('db')
-);
+// $capsule->addConnection(
+// 	$app->config->get('db')
+// );
 
 $capsule->addConnection([
 	'driver' => $app->config->get('db.driver'),
