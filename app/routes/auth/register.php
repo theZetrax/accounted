@@ -1,5 +1,6 @@
 <?php
 
+use Accounted\Validation\ErrorHandler;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException as NestedValidationException;
 
@@ -13,6 +14,7 @@ $app->get('/register', function() use ($app) {
 $app->post('/register', function() use ($app) {
 
 	$request = $app->request();
+	$errorHandler = new ErrorHandler();
 
 	$email = $request->post('email');
 	$username = $request->post('username');
@@ -22,52 +24,46 @@ $app->post('/register', function() use ($app) {
 	try { v::notEmpty()->email()->setName('email')->assert($email); }
 	catch (NestedValidationException $exc)
 	{
-		var_dump($exc->getMessages([
-			'alnum' => '{{name}} is not all numeric',
+		$errorHandler->AddErrorList('email', $exc->getMessages([
 			'notEmpty' => '{{name}} must not be empty',
-			'email' => '{{name}} is not a valid email',
-			'equals' => '{{name}} is not the same as password'
+			'email' => '{{name}} is not a valid email'
 		]));
-		
 	}
 
 	try	{ v::alnum('_')->notEmpty()->max(20)->setName('username')->assert($username); } 
 	catch (NestedValidationException $exc)
 	{
-		var_dump($exc->getMessages([
-			'alnum' => '{{name}} is not all numeric',
+		$errorHandler->AddErrorList('username', $exc->getMessages([
+			'alnum' => '{{name}} is must be all numeric containing only dashes.',
 			'notEmpty' => '{{name}} must not be empty',
-			'email' => '{{name}} is not a valid email',
-			'equals' => '{{name}} is not the same as password'
+			'max' => '{{name}} is more than 20 characters long'
 		]));
-
 	}
 
-	try	{ v::alnum()->notEmpty()->min('6')->setName('password')->assert($password); }
+	try	{ v::alnum()->min('6')->notEmpty()->setName('password')->assert($password); }
 	catch (NestedValidationException $exc)
 	{
-		var_dump($exc->getMessages([
-			'alnum' => '{{name}} is not all numeric',
-			'notEmpty' => '{{name}} must not be empty',
-			'email' => '{{name}} is not a valid email',
-			'equals' => '{{name}} is not the same as password'
+		$errorHandler->AddErrorList('password', $exc->getMessages([
+			'notEmpty' => '{{name}} can\'t be empty',
+			'min' => '{{name}} must be at least 6 characters long.'
 		]));
-
 	}
 
-	try	{ v::alnum()->equals($password)->setName('confirmed password')->assert($passwordConfirm); }
+	try	{ v::equals($password)->setName('confirmed password')->assert($passwordConfirm); }
 	catch (NestedValidationException $exc)
 	{
-		var_dump($exc->getMessages([
-			'alnum' => '{{name}} is not all numeric',
-			'notEmpty' => '{{name}} must not be empty',
-			'email' => '{{name}} is not a valid email',
-			'equals' => '{{name}} is not the same as password'
-		]));
-
+		$errorHandler->AddErrorList('confirm_password', $exc->getMessages());
 	}
 	
-	die();
+	if(!$errorHandler->IsEmpty())
+	{
+		$app->render('auth/register.php', [
+			'errors' => $errorHandler,
+			'request' => $request
+		]);
+		
+		die();
+	}
 	
 	$app->user->create([
 		'email' => $email,
