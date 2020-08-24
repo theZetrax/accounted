@@ -6,10 +6,12 @@ require __DIR__ . '/app/bootstrap.php';
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
 
-$validator = v::not(v::emailExists());
+$passwordValidator = v::password();
+$confirmPasswordValidator = v::confirmPassword('whay');
+$emailValidator = v::email();
+
 try
 {
-	$validator->assert('abebe@email.com');
 } catch (NestedValidationException $exc)
 {
 	var_dump($exc->getMessages());

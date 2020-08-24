@@ -20,17 +20,17 @@
 		</div>
 		<div>
 			<label for="password">Password</label>
-			<input type="text" name="password" id="password"
+			<input type="password" name="password" id="password"
 				{% if requset.post('password') and not errors.ContainsError('password') %} value= "{{ request.post('password') }}" {% endif %}
 			>
 			{% if errors.GetError('password') %} {{ errors.First('password') }} {% endif %}
 		</div>
 		<div>
 			<label for="password_confirm">Password Confirm</label>
-			<input type="text" name="password_confirm" id="password_confirm"
-				{% if request.post('confirm_password') and not errors.ContainsError('confirm_password') %} value= "{{ request.post('confirm_password') }}" {% endif %}
+			<input type="password" name="password_confirm" id="password_confirm"
+				{% if request.post('password_confirm') and not errors.ContainsError('password_confirm') %} value= "{{ request.post('confirm_password') }}" {% endif %}
 			>
-			{% if errors.GetError('confirm_password') %} {{ errors.First('confirm_password') }} {% endif %}
+			{% if errors.GetError('password_confirm') %} {{ errors.First('password_confirm') }} {% endif %}
 		</div>
 		<div>
 			<input type="submit" value="Register">

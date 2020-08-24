@@ -30,7 +30,7 @@ $app->post('/register', function() use ($app) {
 		]));
 	}
 
-	try { v::emailExists()->validate($email); }
+	try { v::emailExists()->assert($email); }
 	catch (NestedValidationException $exc)
 	{
 		# if email error doesn't already exist, set this error
@@ -50,10 +50,10 @@ $app->post('/register', function() use ($app) {
 		$errorHandler->AddErrorList('password', $exc->getMessages());
 	}
 
-	try { v::confirmPassword($password)->validate($passwordConfirm); }
+	try { v::confirmPassword($password)->assert($passwordConfirm); }
 	catch (NestedValidationException $exc)
 	{
-		$errorHandler->AddErrorList('password_confirm', $exc->getMessages());
+		$errorHandler->AddErrorList('password_confirm', $exc->getMessages([]));
 	}
 	#endregion
 
