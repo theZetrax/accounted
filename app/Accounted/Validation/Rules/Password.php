@@ -14,7 +14,8 @@ final class Password extends AbstractRule
 	{
 		$this->passwordValidator = new Rules\AllOf(
 			new Rules\Alnum(),
-			new Rules\NotEmpty()
+			new Rules\NotEmpty(),
+			new Rules\Not(new Rules\Contains('b'))
 		);
 
 		$this->passwordLengthValidator = new Rules\AllOf(
@@ -25,6 +26,6 @@ final class Password extends AbstractRule
 	public function validate($input): bool
 	{
 		// Only letters and numbers
-		return $this->passwordValidator->validate($input) && $this->passwordLengthValidator->validate(count($input));
+		return $this->passwordValidator->validate($input) && $this->passwordLengthValidator->validate(strlen($input));
 	}
 }

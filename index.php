@@ -1,11 +1,13 @@
 <?php
 
 require_once __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/app/bootstrap.php';
 
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\AllOfException;
 use Respect\Validation\Exceptions\NestedValidationException;
 use Respect\Validation\Factory;
+use Illuminate\Database\Capsule\Manager as Capsule;
 
 Factory::setDefaultInstance(
 	(new Factory())
@@ -15,11 +17,8 @@ Factory::setDefaultInstance(
 
 try
 {
-	v::password()->assert('aaa');
+	v::not(v::usernameExists())->assert('abesbe');
 } catch (NestedValidationException $exc)
 {
-	var_dump($exc->getMessages([
-		'uppercase' => 'data must always be uppercase',
-		'noWhitespace' => 'data must not contain white space'
-	]));
+	var_dump($exc->getMessages());
 }

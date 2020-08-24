@@ -5,7 +5,7 @@ namespace Accounted\Validation\Rules;
 use Accounted\User\User;
 use Respect\Validation\Rules\AbstractRule;
 
-final class UniqueUsername extends AbstractRule
+final class UsernameExists extends AbstractRule
 {
 	public function validate($input): bool
 	{

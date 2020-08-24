@@ -26,6 +26,6 @@ final class Username extends AbstractRule
 
 	public function validate($input): bool
 	{
-		return $this->usernameValidator->validate($input) && $this->usernameLengthValidator->validate(count($input));
+		return $this->usernameValidator->validate($input) && $this->usernameLengthValidator->validate(strlen($input));
 	}
 }

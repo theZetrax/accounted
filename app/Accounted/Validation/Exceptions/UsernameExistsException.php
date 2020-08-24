@@ -4,9 +4,9 @@ namespace Accounted\Validation\Exceptions;
 
 use Respect\Validation\Exceptions\ValidationException;
 
-final class UniqueUsernameException extends ValidationException
+final class UsernameExistsException extends ValidationException
 {
-	protected $defaultTemplate = [
+	protected $defaultTemplates = [
 		self::MODE_DEFAULT => [
 			self::STANDARD => 'Username already exists.'
 		],

@@ -19,7 +19,7 @@ $app->post('/register', function() use ($app) {
 	$email = $request->post('email');
 	$username = $request->post('username');
 	$password = $request->post('password');
-	$passwordConfirm = $request->post('passwordConfirm');
+	$passwordConfirm = $request->post('password_confirm');
 
 	try { v::notEmpty()->email()->setName('email')->assert($email); }
 	catch (NestedValidationException $exc)
