@@ -16,6 +16,12 @@ class ErrorHandler
 				$this->AddErrorList($name, $errors);
 	}
 
+	/**
+	 * Adds an an array of errors of $errorname with $errorList array
+	 * 
+	 * @param array $errorList
+	 * @return void
+	 */
 	public function AddErrors(array $errorList)
 	{
 		foreach ($errorList as $name => $errors)

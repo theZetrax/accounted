@@ -21,40 +21,42 @@ $app->post('/register', function() use ($app) {
 	$password = $request->post('password');
 	$passwordConfirm = $request->post('password_confirm');
 
-	try { v::notEmpty()->email()->setName('email')->assert($email); }
+	#region Handeling Input
+	try { v::email()->setName('Email')->assert($email); }
 	catch (NestedValidationException $exc)
 	{
 		$errorHandler->AddErrorList('email', $exc->getMessages([
-			'notEmpty' => '{{name}} must not be empty',
-			'email' => '{{name}} is not a valid email'
+			'Email' => '{{name}} is not valid'
 		]));
 	}
 
-	try	{ v::alnum('_')->notEmpty()->max(20)->setName('username')->assert($username); } 
+	try { v::emailExists()->validate($email); }
 	catch (NestedValidationException $exc)
 	{
-		$errorHandler->AddErrorList('username', $exc->getMessages([
-			'alnum' => '{{name}} is must be all numeric containing only dashes.',
-			'notEmpty' => '{{name}} must not be empty',
-			'max' => '{{name}} is more than 20 characters long'
-		]));
+		# if email error doesn't already exist, set this error
+		if(!$errorHandler->ContainsError('email'))
+			$errorHandler->AddErrorList('email', $exc->getMessages());
 	}
 
-	try	{ v::alnum()->min('6')->notEmpty()->setName('password')->assert($password); }
+	try { v::usernameExists()->username()->assert($username); }
 	catch (NestedValidationException $exc)
 	{
-		$errorHandler->AddErrorList('password', $exc->getMessages([
-			'notEmpty' => '{{name}} can\'t be empty',
-			'min' => '{{name}} must be at least 6 characters long.'
-		]));
+		$errorHandler->AddErrorList('username', $exc->getMessages());
 	}
 
-	try	{ v::equals($password)->setName('confirmed password')->assert($passwordConfirm); }
+	try { v::password()->assert($password); }
 	catch (NestedValidationException $exc)
 	{
-		$errorHandler->AddErrorList('confirm_password', $exc->getMessages());
+		$errorHandler->AddErrorList('password', $exc->getMessages());
 	}
-	
+
+	try { v::confirmPassword($password)->validate($passwordConfirm); }
+	catch (NestedValidationException $exc)
+	{
+		$errorHandler->AddErrorList('password_confirm', $exc->getMessages());
+	}
+	#endregion
+
 	if(!$errorHandler->IsEmpty())
 	{
 		$app->render('auth/register.php', [

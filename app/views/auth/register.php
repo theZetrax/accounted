@@ -7,7 +7,7 @@
 		<div>
 			<label for="email">Email</label>
 			<input type="text" name="email" id="email" 
-				{% if request.post('email') and not errors.ContainsError('email') %} value= "{{ request.post('email') }}" {% endif %}
+				{% if request.post('email') %} value= "{{ request.post('email') }}" {% endif %}
 			>
 			{% if errors.GetError('email') %} {{ errors.First('email') }} {% endif %}
 		</div>

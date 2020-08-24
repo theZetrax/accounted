@@ -23,6 +23,9 @@ final class Password extends AbstractRule
 		);
 	}
 	
+	/**
+	 * {@inheritdoc}
+	 */
 	public function validate($input): bool
 	{
 		// Only letters and numbers

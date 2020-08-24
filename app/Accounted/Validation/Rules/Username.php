@@ -24,6 +24,9 @@ final class Username extends AbstractRule
 		);
 	}
 
+	/**
+	 * {@inheritdoc}
+	 */
 	public function validate($input): bool
 	{
 		return $this->usernameValidator->validate($input) && $this->usernameLengthValidator->validate(strlen($input));
