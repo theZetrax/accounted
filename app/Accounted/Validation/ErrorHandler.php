@@ -58,6 +58,10 @@ class ErrorHandler
 		if(!$this->ContainsError($key)) return false;
 		return array_values($this->GetError($key))[0];
 	}
+	public function Clear()
+	{
+		$this->errors = [];
+	}
 
 	#region [Internal]
 	protected static function CheckInputFormat(array $input)

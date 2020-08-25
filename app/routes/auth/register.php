@@ -26,7 +26,7 @@ $app->post('/register', function() use ($app) {
 	catch (NestedValidationException $exc)
 	{
 		$errorHandler->AddErrorList('email', $exc->getMessages([
-			'Email' => '{{name}} is not valid'
+			'Email' => 'Email not valid'
 		]));
 	}
 

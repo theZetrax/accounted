@@ -111,4 +111,29 @@ class ErrorHandlerTest extends TestCase
 		$this->assertEquals(array_values($errorList['email'])[0], $this->errorHandler->First('email'));
 		$this->assertEquals(array_values($errorList['password'])[0], $this->errorHandler->First('password'));
 	}
+
+	/** @test */
+	public function can_clear_error_handler()
+	{
+		$errorList = [
+			'email' => [
+				'alnum' => 'email is not all numeric',
+				'notEmpty' => 'email must not be empty',
+				'email' => 'email is not a valid email',
+				'equals' => 'email is not the same as password'
+			],
+			'password' => [
+				'notEmpty' => 'email must not be empty',
+				'email' => 'email is not a valid email',
+				'alnum' => 'email is not all numeric',
+				'equals' => 'email is not the same as password'
+			]
+		];
+
+		$this->errorHandler->AddErrors($errorList);
+		$this->assertFalse($this->errorHandler->IsEmpty());
+		$this->errorHandler->Clear();
+
+		$this->assertTrue($this->errorHandler->IsEmpty());
+	}
 }
