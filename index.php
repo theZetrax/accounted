@@ -12,7 +12,7 @@ $emailValidator = v::email();
 
 try
 {
-	v::accountPasswordCorrect('abebe')->assert('pass1234');
+	v::accountPasswordIncorrect('emili', $app->hash)->assert('passsas1234');
 } catch (NestedValidationException $exc)
 {
 	var_dump($exc->getMessages());

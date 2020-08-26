@@ -1,5 +1,6 @@
 <?php
 
+use Accounted\User\User;
 use Accounted\Validation\ErrorHandler;
 use Respect\Validation\Validator as v;
 use Respect\Validation\Exceptions\NestedValidationException;
@@ -35,6 +36,8 @@ $app->post('/login', function() use ($app) {
 		die();
 	}
 
-	# Login
+	$user = User::where('username', $identifier)
+				->orWhere('email', $identifier)
+				->first();
 	
 })->name('login.post');

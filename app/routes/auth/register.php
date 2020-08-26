@@ -6,6 +6,7 @@ use Respect\Validation\Exceptions\NestedValidationException as NestedValidationE
 
 /** @var Slim\Slim $app */
 /** @var \Illuminate\Database\Eloquent\Model $app->user */
+/** @var Accounted\Helpers\Hash $app->hash */
 
 $app->get('/register', function() use ($app) {
 	$app->render('auth/register.php');
@@ -59,6 +60,7 @@ $app->post('/register', function() use ($app) {
 
 	if(!$errorHandler->IsEmpty())
 	{
+		$app->flash('global', 'Please make sure you\'ve filled the form correctly.');
 		$app->render('auth/register.php', [
 			'errors' => $errorHandler,
 			'request' => $request
@@ -70,7 +72,7 @@ $app->post('/register', function() use ($app) {
 	$app->user->create([
 		'email' => $email,
 		'username' => $username,
-		'password' => $password
+		'password' => $app->hash->password($password)
 	]);
 
 	$app->flash('global', 'You have been registered');

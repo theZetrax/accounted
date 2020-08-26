@@ -14,7 +14,7 @@
 		<div>
 			<label for="username">Username</label>
 			<input type="text" name="username" id="username" 
-				{% if request.post('username') and not errors.ContainsError('username') %} value= "{{ request.post('username') }}" {% endif %}
+				{% if request.post('username') %} value= "{{ request.post('username') }}" {% endif %}
 			>
 			{% if errors.GetError('username') %} {{ errors.First('username') }} {% endif %}
 		</div>
