@@ -7,6 +7,7 @@ use Respect\Validation\Exceptions\NestedValidationException;
 
 /** @var Slim\Slim $app */
 /** @var Illuminate\Database\Eloquent\Model $app->user */
+/** @var \Accounted\Helpers\Hash $app->hash */
 
 $app->get('/login', function() use ($app) {
 	$app->render('auth/login.php');
@@ -39,5 +40,15 @@ $app->post('/login', function() use ($app) {
 	$user = User::where('username', $identifier)
 				->orWhere('email', $identifier)
 				->first();
+
+	if($user && $app->hash->passwordCheck($password, $user->password))
+	{
+		$_SESSION[$app->config->get('auth.session')] = $user->id;
+		$app->flash('global', 'You have been logger in.');
+	} else {
+		$app->flash('global', 'Couldn\'t log you in');
+	}
+
+	$app->redirect($app->urlFor('home'));
 	
 })->name('login.post');

@@ -11,6 +11,7 @@ use Respect\Validation\Factory;
 
 use Accounted\User\User;
 use Accounted\Helpers\Hash;
+use Accounted\Middleware\BeforeMiddleware;
 
 session_cache_limiter(false);
 session_start();
@@ -27,12 +28,16 @@ $app = new Slim([
 	'templates.path' => INC_ROOT . '/app/views'
 ]);
 
+$app->add(new BeforeMiddleware);
+
 $app->configureMode($app->config('mode'), function() use ($app) {
 	$app->config = Config::load( INC_ROOT . "/app/config/{$app->mode}.php" );
 });
 
 require __DIR__ . '\\database.php';
 require __DIR__ . '\\routes.php';
+
+$app->auth = false;
 
 $app->container->set('user', function() {
 	return new User();
