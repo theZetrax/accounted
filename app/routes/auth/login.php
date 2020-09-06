@@ -38,13 +38,14 @@ $app->post('/login', function() use ($app) {
 	}
 
 	$user = User::where('username', $identifier)
+				->where('active', true)
 				->orWhere('email', $identifier)
 				->first();
 
 	if($user && $app->hash->passwordCheck($password, $user->password))
 	{
 		$_SESSION[$app->config->get('auth.session')] = $user->id;
-		$app->flash('global', 'You have been logger in.');
+		$app->flash('global', 'You have been logged in.');
 	} else {
 		$app->flash('global', 'Couldn\'t log you in');
 	}

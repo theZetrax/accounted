@@ -6,12 +6,16 @@ use Noodlehaus\Config;
 use Slim\Slim;
 use Slim\Views\Twig;
 use Slim\Views\TwigExtension;
+
 # Respect
 use Respect\Validation\Factory;
 
 use Accounted\User\User;
+use Accounted\Mail\Mailer;
 use Accounted\Helpers\Hash;
 use Accounted\Middleware\BeforeMiddleware;
+
+use RandomLib\Factory as RandomLib;
 
 session_cache_limiter(false);
 session_start();
@@ -43,8 +47,28 @@ $app->container->set('user', function() {
 	return new User();
 });
 
+$app->container->singleton('randomlib', function() use ($app) {
+	$factory = new RandomLib;
+	return $factory->getMediumStrengthGenerator();
+});
+
 $app->container->singleton('hash', function() use ($app) {
 	return new Hash($app->config);
+});
+
+$app->container->singleton('mail', function() use ($app) {
+	$mailer = new PHPMailer;
+
+	$mailer->Host = $app->config->get('mail.host');
+	$mailer->SMTPAuth = $app->config->get('mail.smtp_auth');
+	$mailer->SMTPSecure = $app->config->get('mail.smtp_secure');
+	$mailer->Port = $app->config->get('mail.port');
+	$mailer->Username = $app->config->get('mail.username');
+	$mailer->Password = $app->config->get('mail.password');
+	
+	$mailer->isHTML($app->config->get('mail.html'));
+
+	return new Mailer($app->view, $mailer);
 });
 
 /** @var \Slim\View */
